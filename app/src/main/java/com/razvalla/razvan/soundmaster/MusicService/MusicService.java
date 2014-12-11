@@ -36,7 +36,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         super.onCreate();
         playbackManager = new PlaybackManager(getApplicationContext());
         String path = getSong();
-        playbackManager.playSong(path);
+//        playbackManager.playSong(path);
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

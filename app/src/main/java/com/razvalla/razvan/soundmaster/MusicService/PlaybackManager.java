@@ -1,6 +1,7 @@
 package com.razvalla.razvan.soundmaster.MusicService;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
@@ -46,15 +47,18 @@ public class PlaybackManager {
     private MediaPlayer getMediaPlayer() {
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         }
         return mMediaPlayer;
     }
     private MediaPlayer getMediaPlayerWithSongPath(String songPath) {
         if (mMediaPlayer == null) {
             mMediaPlayer = MediaPlayer.create(mApplicationContext, Uri.parse(songPath));
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             return mMediaPlayer;
         }
         mMediaPlayer.stop();
+        mMediaPlayer.reset();
         try {
             mMediaPlayer.setDataSource(songPath);
             mMediaPlayer.prepare();

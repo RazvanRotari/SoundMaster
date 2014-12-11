@@ -1,22 +1,15 @@
 package com.razvalla.razvan.soundmaster;
 
-import android.app.Fragment;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.Button;
 
+import com.razvalla.razvan.soundmaster.Fragments.CurrentPlaylistFragment;
 import com.razvalla.razvan.soundmaster.MusicService.MusicService;
 
 
@@ -27,17 +20,13 @@ public class MusicPlayer extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
         }
         class MusicConnection implements ServiceConnection {
-
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mMusicService = ((MusicService.MusicBinder)service).getService();
-                PlaceholderFragment fragment = (PlaceholderFragment)getFragmentManager().findFragmentById(R.id.container);
-                fragment.mMusicService = mMusicService;
+                CurrentPlaylistFragment fragment = (CurrentPlaylistFragment)getFragmentManager().findFragmentById(R.id.playerFragment);
+                fragment.setMusicService(mMusicService);
             }
 
             @Override
@@ -46,6 +35,7 @@ public class MusicPlayer extends ActionBarActivity {
             }
         }
         boolean ret = bindService(new Intent(getBaseContext(), MusicService.class), new MusicConnection(), BIND_AUTO_CREATE);
+        assert ret;
 
     }
 
@@ -69,27 +59,5 @@ public class MusicPlayer extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment implements View.OnClickListener {
-        MusicService mMusicService;
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_music_player, container, false);
-            ((Button)rootView.findViewById(R.id.playButton)).setOnClickListener(this);
-            return rootView;
-        }
-
-        @Override
-        public void onClick(View v) {
-            mMusicService.pause();
-        }
     }
 }
