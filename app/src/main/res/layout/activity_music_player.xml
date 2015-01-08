@@ -5,8 +5,26 @@
 
     <fragment
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="529dp"
         android:name="com.razvalla.razvan.soundmaster.Fragments.CurrentPlaylistFragment"
         android:id="@+id/playerFragment"
         tools:layout="@android:layout/simple_list_item_2" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/List"
+        android:id="@+id/list_button"
+        android:layout_gravity="right|bottom"
+        android:onClick="openMusicList" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/playbackScreen"
+        android:id="@+id/playback_screen_button"
+        android:layout_gravity="left|bottom"
+        android:onClick="openPlaybackView" />
 </FrameLayout>

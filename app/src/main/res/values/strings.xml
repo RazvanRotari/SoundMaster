@@ -6,4 +6,19 @@
     <string name="action_settings">Settings</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
+    <string name="title_activity_music_list">MusicListActivity</string>
+    <string name="List">List</string>
+    <string name="playbackScreen">Playback</string>
+    <string name="title_activity_music_object_list">MusicObjectListActivity</string>
+    <string name="Artists">Artists</string>
+    <string name="Albums">Albums</string>
+    <string name="Songs">Songs</string>
+    <string name="Playlists">Playlists</string>
+
+    <string-array name="musicListActions">
+        <item>Play Now</item>
+        <item>Play Next</item>
+        <item>Add To Queue</item>
+    </string-array>
+
 </resources>

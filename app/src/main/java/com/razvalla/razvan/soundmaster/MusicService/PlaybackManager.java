@@ -15,13 +15,18 @@ import java.io.IOException;
 public class PlaybackManager {
     private MediaPlayer mMediaPlayer;
     private Context mApplicationContext;
+    public OnSongCompleted onSongCompleted;
+
+    public interface OnSongCompleted {
+        void onSongCompled(PlaybackManager playbackManager);
+    }
 
     public PlaybackManager(Context applicationContext) {
         mApplicationContext = applicationContext;
     }
 
     public boolean playSong(SongInfo songInfo) {
-        return playSong(songInfo.getSongPath().getPath());
+        return playSong(songInfo.getSongPath());
     }
 
     public boolean playSong(String path) {
@@ -48,6 +53,12 @@ public class PlaybackManager {
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    onSongCompleted.onSongCompled(PlaybackManager.this);
+                }
+            });
         }
         return mMediaPlayer;
     }
@@ -55,6 +66,12 @@ public class PlaybackManager {
         if (mMediaPlayer == null) {
             mMediaPlayer = MediaPlayer.create(mApplicationContext, Uri.parse(songPath));
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    onSongCompleted.onSongCompled(PlaybackManager.this);
+                }
+            });
             return mMediaPlayer;
         }
         mMediaPlayer.stop();

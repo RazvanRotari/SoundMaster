@@ -1,13 +1,16 @@
 package com.razvalla.razvan.soundmaster.Model;
 
-import android.net.Uri;
-
 /**
  * Created by Razvan on 12/9/2014.
  */
 public class SongInfo extends DataModel {
-    Uri songPath;
-    public Uri getSongPath() {
+    public String songPath;
+    public String artistName;
+    public String duration;
+    public String key;
+    public String albumKey;
+
+    public String getSongPath() {
         return songPath;
     }
 }

@@ -1,19 +1,21 @@
-package com.razvalla.razvan.soundmaster;
+package com.razvalla.razvan.soundmaster.Activities;
 
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.razvalla.razvan.soundmaster.Fragments.CurrentPlaylistFragment;
 import com.razvalla.razvan.soundmaster.MusicService.MusicService;
+import com.razvalla.razvan.soundmaster.R;
 
 
-public class MusicPlayer extends ActionBarActivity {
+public class MusicPlayer extends ActionBarActivity implements View.OnClickListener{
     MusicService mMusicService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,5 +61,21 @@ public class MusicPlayer extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    public void openMusicList(View v) {
+        Intent intent = new Intent(this, MusicObjectListActivity.class);
+        startActivity(intent);
+    }
+
+    public void openPlaybackView(View v) {
+//        Intent intent = new Intent(this, MusicListActivity.class);
+//        startActivity(intent);
+
     }
 }
