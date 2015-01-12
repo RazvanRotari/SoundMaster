@@ -5,7 +5,8 @@ public enum MusicType {
     Albums(1),
     Songs(2),
     Playlists(3),
-    Queue(4);
+    Queue(4),
+    None(-1);
 
     private final int value;
     MusicType(int i) {

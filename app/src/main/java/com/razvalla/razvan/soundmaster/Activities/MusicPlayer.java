@@ -1,5 +1,6 @@
 package com.razvalla.razvan.soundmaster.Activities;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -15,8 +16,9 @@ import com.razvalla.razvan.soundmaster.MusicService.MusicService;
 import com.razvalla.razvan.soundmaster.R;
 
 
-public class MusicPlayer extends ActionBarActivity implements View.OnClickListener{
+public class MusicPlayer extends ActionBarActivity implements View.OnClickListener, MusicServiceProvider{
     MusicService mMusicService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +28,8 @@ public class MusicPlayer extends ActionBarActivity implements View.OnClickListen
         class MusicConnection implements ServiceConnection {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                mMusicService = ((MusicService.MusicBinder)service).getService();
-                CurrentPlaylistFragment fragment = (CurrentPlaylistFragment)getFragmentManager().findFragmentById(R.id.playerFragment);
+                mMusicService = ((MusicService.MusicBinder) service).getService();
+                CurrentPlaylistFragment fragment = (CurrentPlaylistFragment) getFragmentManager().findFragmentById(R.id.playerFragment);
                 fragment.setMusicService(mMusicService);
             }
 
@@ -38,6 +40,12 @@ public class MusicPlayer extends ActionBarActivity implements View.OnClickListen
         }
         boolean ret = bindService(new Intent(getBaseContext(), MusicService.class), new MusicConnection(), BIND_AUTO_CREATE);
         assert ret;
+        findViewById(R.id.list_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MusicPlayer.this.startActivity(new Intent(MusicPlayer.this, SimpleMusicListActivity.class));
+            }
+        });
 
     }
 
@@ -74,8 +82,13 @@ public class MusicPlayer extends ActionBarActivity implements View.OnClickListen
     }
 
     public void openPlaybackView(View v) {
-//        Intent intent = new Intent(this, MusicListActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, MusicPlayerController.class);
+        startActivity(intent);
+        overridePendingTransition(R.animator.from_middle, R.animator.to_middle);
+    }
 
+    @Override
+    public MusicService getMusicService() {
+        return mMusicService;
     }
 }

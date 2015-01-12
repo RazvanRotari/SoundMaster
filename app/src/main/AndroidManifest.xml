@@ -22,12 +22,20 @@
         <service android:name=".MusicService.MusicService" />
 
         <activity
-            android:name=".Activities.MusicListActivity"
-            android:label="@string/title_activity_music_list" >
-        </activity>
-        <activity
             android:name=".Activities.MusicObjectListActivity"
             android:label="@string/title_activity_music_object_list" >
+        </activity>
+        <activity
+            android:name=".Activities.SimpleMusicListActivity"
+            android:label="@string/title_activity_simple_music_list" >
+        </activity>
+        <activity
+            android:name=".Activities.SimpleObjectListActivity"
+            android:label="@string/title_activity_simple_music_list" >
+        </activity>
+        <activity
+            android:name=".Activities.MusicPlayerController"
+            android:label="@string/title_activity_music_player_controller" >
         </activity>
     </application>
 

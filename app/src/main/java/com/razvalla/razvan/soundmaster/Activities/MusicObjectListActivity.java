@@ -21,7 +21,7 @@ import com.razvalla.razvan.soundmaster.R;
 
 import java.util.Locale;
 
-public class MusicObjectListActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MusicObjectListActivity extends ActionBarActivity implements ActionBar.TabListener, MusicServiceProvider {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

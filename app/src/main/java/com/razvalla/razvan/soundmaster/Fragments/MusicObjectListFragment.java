@@ -1,13 +1,14 @@
 package com.razvalla.razvan.soundmaster.Fragments;
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.app.LoaderManager;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,25 +18,47 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.razvalla.razvan.soundmaster.Activities.MusicObjectListActivity;
+import com.razvalla.razvan.soundmaster.Activities.MusicServiceProvider;
 import com.razvalla.razvan.soundmaster.Activities.MusicType;
 import com.razvalla.razvan.soundmaster.Model.SongInfo;
 import com.razvalla.razvan.soundmaster.MusicService.MusicService;
 import com.razvalla.razvan.soundmaster.MusicService.QueueManager;
 import com.razvalla.razvan.soundmaster.R;
 
-/**
- * Created by Razvan on 1/4/2015.
- */
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class MusicObjectListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    int LOADER_ID = 20;
     MusicService musicService;
     QueueManager queueManager;
-    Cursor cursor;
     MusicType musicType;
     Uri queryString = null;
+    String selection = null;
+    String[] selectionArgs = null;
+    String[] projection = null;
+    int[] to;
+    String[] from;
+    public String key = null;
+    public MusicType fromMusicType = MusicType.None;
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     public static MusicObjectListFragment newInstance(MusicType musicType) {
-        MusicObjectListFragment fragment = new MusicObjectListFragment();
+        MusicObjectListFragment fragment = null;
+        switch (musicType) {
+            case Songs:
+                fragment = new SongListFragment();
+                break;
+            case Albums:
+                fragment = new AlbumListFragment();
+                break;
+            case Artists:
+                fragment = new ArtistListFragment();
+                break;
+            default:
+                fragment = new MusicObjectListFragment();
+        }
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, musicType.getValue());
         fragment.setArguments(args);
@@ -52,17 +75,11 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
 
     public void onStop() {
         super.onStop();
-        if (cursor != null) {
-            cursor.close();
-        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (cursor != null) {
-            cursor.close();
-        }
     }
 
     private void loadData() {
@@ -70,41 +87,19 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
         SimpleCursorAdapter adapter = getAdapterForMusicType(musicType);
         setListAdapter(adapter);
         setListShownNoAnimation(false);
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
-    private SimpleCursorAdapter getAdapterForMusicType(MusicType musicType) {
+    protected SimpleCursorAdapter getAdapterForMusicType(MusicType musicType) {
         SimpleCursorAdapter adapter = null;
-        String[] from = new String[0];
-        int[] to = new int[0];
         int layout = 0;
         switch (musicType) {
-            case Artists:
-                queryString = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
-                from = new String[]{MediaStore.Audio.ArtistColumns.ARTIST};
-                to = new int[]{android.R.id.text1};
-                layout = android.R.layout.simple_list_item_1;
-                break;
-
-            case Albums:
-                queryString = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
-                from = new String[]{MediaStore.Audio.AlbumColumns.ALBUM, MediaStore.Audio.AlbumColumns.ARTIST};
-                to = new int[]{android.R.id.text1, android.R.id.text2};
-                layout = android.R.layout.simple_list_item_2;
-                break;
-
-            case Songs:
-                queryString = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                from = new String[]{MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.Audio.AudioColumns.ALBUM};
-                to = new int[]{android.R.id.text1, android.R.id.text2};
-                layout = android.R.layout.simple_list_item_2;
-                break;
-
             case Playlists:
                 queryString = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
                 from = new String[]{MediaStore.Audio.PlaylistsColumns.NAME};
                 to = new int[]{android.R.id.text1};
                 layout = android.R.layout.simple_list_item_1;
+                projection = from;
                 break;
 
             case Queue:
@@ -114,16 +109,6 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
                 layout = android.R.layout.simple_list_item_2;
                 break;
         }
-        cursor = getActivity()
-                .getContentResolver()
-                .query(
-                        queryString,
-                        from,
-                        null,
-                        null,
-                        null
-                );
-
         adapter = new SimpleCursorAdapter(getActivity(),
                 layout,
                 null,
@@ -136,6 +121,23 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
     public void onListItemClick(ListView listView, View view, int position, long id) {
     }
 
+    protected String getSelection(MusicType musicType) {
+        String field = null;
+        switch (musicType) {
+            case Albums:
+                field = MediaStore.Audio.AudioColumns.ALBUM_KEY;
+                break;
+            case Artists:
+                field = MediaStore.Audio.AlbumColumns.ARTIST;
+        }
+
+        String selection = null;
+        if (field != null) {
+            selection = String.format("%s=?", field);
+        }
+        return selection;
+    }
+
     //Setters & Getters
     public void setMusicService(MusicService musicService) {
         this.musicService = musicService;
@@ -143,7 +145,7 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
     }
 
     MusicService getMusicService() {
-        return ((MusicObjectListActivity)getActivity()).getMusicService();
+        return ((MusicServiceProvider)getActivity()).getMusicService();
     }
 
     QueueManager getQueueManager() {
@@ -153,23 +155,49 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
     //LoaderCallbacks
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(),
-                queryString,
-                null,
-                null,
-                null,
+        Uri query = queryString;
+        assert query != null;
+        String[] fromL = null;
+        try {
+            if (this.projection != null) {
+                List<String> fromList = new ArrayList<>();
+                fromList.add("_id");
+                Collections.addAll(fromList, this.projection);
+                fromL = new String[fromList.size()];
+                fromL = fromList.toArray(fromL);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+        String sel = selection;
+        String[] selArg = selectionArgs;
+        if (sel == null) {
+            selArg = null;
+        }
+        CursorLoader cursorLoader = new CursorLoader(getActivity(),
+                query,
+                fromL,
+                sel,
+                selArg,
                 null);
+        return cursorLoader;
     }
 
     @Override
-    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+    public void onLoaderReset(Loader<Cursor> loader) {
+        ((SimpleCursorAdapter) getListAdapter()).swapCursor(null);
+
     }
 
     @Override
     public void onLoadFinished(Loader loader, Cursor data) {
-        cursor.close();
-        ((SimpleCursorAdapter)getListAdapter()).swapCursor(data);
-
+        if (loader.getId() != LOADER_ID) {
+            return;
+        }
+        ((SimpleCursorAdapter) getListAdapter()).swapCursor(data);
         // The list should now be shown.
         if (isResumed()) {
             setListShown(true);
@@ -188,35 +216,20 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
             menu.add(Menu.NONE, i, i, menuItems[i]);
         }
     }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        if (musicType != MusicType.Songs) {
-            return false;
-        }
-        musicService = getMusicService();
-        assert musicService != null;
-        int menuItemIndex = item.getItemId();
-        SongInfo songInfo = new SongInfo();
-
-//        from = new String[]{MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.Audio.AudioColumns.ALBUM};
-        Cursor cursor = (Cursor) getListAdapter().getItem(info.position);
+    protected SongInfo getSongFromCursor(Cursor cursor) {
         String songPath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+        SongInfo songInfo = new SongInfo();
         songInfo.songPath = songPath;
         songInfo.name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME));
         songInfo.artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
         songInfo.key = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE_KEY));
         songInfo.duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION));
         songInfo.albumKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID));
+        return songInfo;
+    }
 
-        if (menuItemIndex == 0) {
-            musicService.playNow(songInfo);
-        } else if (menuItemIndex == 1) {
-            musicService.playNext(songInfo);
-        } else if (menuItemIndex == 2) {
-            musicService.addToQueue(songInfo);
-        }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
 
         return true;
     }

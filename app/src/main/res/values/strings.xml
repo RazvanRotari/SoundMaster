@@ -21,4 +21,7 @@
         <item>Add To Queue</item>
     </string-array>
 
+    <string name="title_activity_simple_music_list">SimpleMusicListActivity</string>
+    <string name="title_activity_music_player_controller">MusicPlayerController</string>
+
 </resources>

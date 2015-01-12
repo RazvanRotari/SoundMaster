@@ -37,6 +37,14 @@ public class QueueManager implements List<SongInfo> {
         return queue.get(currentIndex);
     }
 
+    public SongInfo previousSong() {
+        if (currentIndex == 0) {
+            return null;
+        }
+        currentIndex--;
+        return queue.get(currentIndex);
+    }
+
     public void setRepeat(boolean repeat) {
         this.repeat = repeat;
     }

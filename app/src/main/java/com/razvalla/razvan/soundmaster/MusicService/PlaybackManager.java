@@ -48,6 +48,14 @@ public class PlaybackManager {
         mediaPlayer.pause();
     }
 
+    public void play() {
+        getMediaPlayer().start();
+    }
+
+    public boolean isPlaying() {
+        return  getMediaPlayer().isPlaying();
+    }
+
     //PRIVATE
     private MediaPlayer getMediaPlayer() {
         if (mMediaPlayer == null) {

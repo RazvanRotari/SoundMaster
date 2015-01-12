@@ -75,6 +75,10 @@ public class MusicService extends Service implements PlaybackManager.OnSongCompl
         playbackManager.pause();
     }
 
+    public  void play() { playbackManager.play();}
+    public boolean isPlaying() {
+        return playbackManager.isPlaying();
+    }
 
     //Queue
     public void playNow(SongInfo songInfo) {
@@ -86,6 +90,16 @@ public class MusicService extends Service implements PlaybackManager.OnSongCompl
     public void playNext(SongInfo songInfo) {
         queueManager.playNext(songInfo);
         saveQueue();
+    }
+
+    public void playNext() {
+        SongInfo songInfo = queueManager.nextSong();
+        playSong(songInfo);
+    }
+
+    public void playPrevious() {
+        SongInfo songInfo = queueManager.previousSong();
+        playSong(songInfo);
     }
 
     public void addToQueue(SongInfo songInfo) {
