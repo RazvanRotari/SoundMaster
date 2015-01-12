@@ -3,26 +3,29 @@ package com.razvalla.razvan.soundmaster.Fragments;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
 
 import com.razvalla.razvan.soundmaster.Activities.MusicType;
 import com.razvalla.razvan.soundmaster.Model.SongInfo;
+import com.razvalla.razvan.soundmaster.R;
 
-public class SongListFragment extends MusicObjectListFragment {
+public class VideoListFragment extends MusicObjectListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        from  =  new String[]{MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.Audio.AudioColumns.ALBUM};
+        from  =  new String[]{MediaStore.Video.VideoColumns.DISPLAY_NAME, MediaStore.Video.VideoColumns.ARTIST};
         to = new int[]{android.R.id.text1, android.R.id.text2};
-        projection = new String[]{MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.Audio.AudioColumns.ALBUM,
-                MediaStore.Audio.AudioColumns.ARTIST,
-                MediaStore.Audio.AudioColumns.TITLE_KEY ,
-                MediaStore.Audio.AudioColumns.DURATION,
-                MediaStore.Audio.AudioColumns.ALBUM_ID
+        projection = new String[]{MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.Video.VideoColumns.ARTIST,
+                MediaStore.Video.VideoColumns.DURATION,
+                MediaStore.Video.VideoColumns.DATA
         };
-        queryString = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        queryString = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         selectionArgs = new String[]{key};
     }
 
@@ -44,18 +47,33 @@ public class SongListFragment extends MusicObjectListFragment {
         return adapter;
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        String[] menuItems = getResources().getStringArray(R.array.musicListActions);
+        for (int i = 0; i<menuItems.length; i++) {
+            menu.add(Menu.NONE, i, i, menuItems[i]);
+        }
+    }
+
+    @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        if (musicType != MusicType.Songs) {
-            return false;
-        }
         musicService = getMusicService();
         assert musicService != null;
         int menuItemIndex = item.getItemId();
-        SongInfo songInfo;
+        SongInfo songInfo = new SongInfo();
 
         Cursor cursor = (Cursor) getListAdapter().getItem(info.position);
-        songInfo = getSongFromCursor(cursor);
+//        projection = new String[]{MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.Video.VideoColumns.ALBUM,
+//                MediaStore.Video.VideoColumns.ARTIST,
+//                MediaStore.Video.VideoColumns.DURATION
+//        };
+        songInfo.name = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+        songInfo.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION));
+        songInfo.artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.ARTIST));
+        songInfo.songPath = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA));
+        songInfo.isVideo = true;
 
         if (menuItemIndex == 0) {
             musicService.playNow(songInfo);

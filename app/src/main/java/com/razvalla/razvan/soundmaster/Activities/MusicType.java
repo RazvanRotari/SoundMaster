@@ -5,6 +5,7 @@ public enum MusicType {
     Albums(1),
     Songs(2),
     Playlists(3),
+    Video(5),
     Queue(4),
     None(-1);
 

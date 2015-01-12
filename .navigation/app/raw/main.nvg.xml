@@ -6,10 +6,26 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.razvalla.razvan.soundmaster.MainActivitysaasd"/>
+      <point      
+        x = "4321"      
+        y = "463"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
         className = "com.razvalla.razvan.soundmaster.Activities.MusicPlayer"/>
       <point      
-        x = "800"      
-        y = "0"/>
+        x = "320"      
+        y = "320"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.MenuState"      
+        xmlResourceName = "menu_main_activitysaasd"/>
+      <point      
+        x = "3668"      
+        y = "640"/>
     </statePointEntry>
     <statePointEntry>
       <state      
@@ -25,15 +41,15 @@
         xmlResourceName = "menu_simple_music_list"/>
       <point      
         x = "1748"      
-        y = "1440"/>
+        y = "2080"/>
     </statePointEntry>
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.MenuState"      
         xmlResourceName = "menu_music_player"/>
       <point      
-        x = "2060"      
-        y = "380"/>
+        x = "1580"      
+        y = "700"/>
     </statePointEntry>
     <statePointEntry>
       <state      
@@ -41,23 +57,39 @@
         className = "com.razvalla.razvan.soundmaster.Activities.SimpleMusicListActivity"/>
       <point      
         x = "480"      
-        y = "1440"/>
+        y = "2080"/>
     </statePointEntry>
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.MenuState"      
         xmlResourceName = "menu_music_object_list"/>
       <point      
-        x = "2868"      
+        x = "3668"      
         y = "2080"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.MenuState"      
+        xmlResourceName = "menu_music_player_controller"/>
+      <point      
+        x = "1768"      
+        y = "4240"/>
     </statePointEntry>
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
         className = "com.razvalla.razvan.soundmaster.Activities.MusicObjectListActivity"/>
       <point      
-        x = "1600"      
+        x = "2400"      
         y = "2080"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.razvalla.razvan.soundmaster.Activities.MusicPlayerController"/>
+      <point      
+        x = "500"      
+        y = "4240"/>
     </statePointEntry>
   </locations>
 </navigationModel>

@@ -9,7 +9,6 @@
         android:name="com.razvalla.razvan.soundmaster.Fragments.CurrentPlaylistFragment"
         android:id="@+id/playerFragment"
         tools:layout="@android:layout/simple_list_item_2" />
-
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -18,7 +17,6 @@
         android:id="@+id/list_button"
         android:layout_gravity="right|bottom"
         android:onClick="openMusicList" />
-
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"

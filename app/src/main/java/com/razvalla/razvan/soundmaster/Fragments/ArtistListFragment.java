@@ -67,7 +67,7 @@ public class ArtistListFragment  extends MusicObjectListFragment {
         songInfo.name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME));
         songInfo.artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
         songInfo.key = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE_KEY));
-        songInfo.duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION));
+        songInfo.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION));
         songInfo.albumKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID));
 
         if (menuItemIndex == 0) {

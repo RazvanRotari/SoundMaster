@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.view.SurfaceHolder;
 
 import com.razvalla.razvan.soundmaster.Model.SongInfo;
 
@@ -56,6 +57,10 @@ public class PlaybackManager {
         return  getMediaPlayer().isPlaying();
     }
 
+    public boolean seek(long progress) {
+        getMediaPlayer().seekTo((int) progress);
+        return true;
+    }
     //PRIVATE
     private MediaPlayer getMediaPlayer() {
         if (mMediaPlayer == null) {
@@ -95,5 +100,9 @@ public class PlaybackManager {
     }
     private MediaPlayer getMediaPlayerForSongInfo(SongInfo songInfo) {
         return getMediaPlayerWithSongPath(songInfo.getSongPath().toString());
+    }
+
+    public void setSurfaceHolder(SurfaceHolder surfaceHolder) {
+        mMediaPlayer.setDisplay(surfaceHolder);
     }
 }

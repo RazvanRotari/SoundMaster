@@ -14,6 +14,7 @@
     <string name="Albums">Albums</string>
     <string name="Songs">Songs</string>
     <string name="Playlists">Playlists</string>
+    <string name="Video">Video</string>
 
     <string-array name="musicListActions">
         <item>Play Now</item>
@@ -23,5 +24,6 @@
 
     <string name="title_activity_simple_music_list">SimpleMusicListActivity</string>
     <string name="title_activity_music_player_controller">MusicPlayerController</string>
+    <string name="title_activity_main_activitysaasd">MainActivitysaasd</string>
 
 </resources>

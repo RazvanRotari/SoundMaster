@@ -1,6 +1,5 @@
 package com.razvalla.razvan.soundmaster.Activities;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -40,13 +39,6 @@ public class MusicPlayer extends ActionBarActivity implements View.OnClickListen
         }
         boolean ret = bindService(new Intent(getBaseContext(), MusicService.class), new MusicConnection(), BIND_AUTO_CREATE);
         assert ret;
-        findViewById(R.id.list_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MusicPlayer.this.startActivity(new Intent(MusicPlayer.this, SimpleMusicListActivity.class));
-            }
-        });
-
     }
 
     @Override

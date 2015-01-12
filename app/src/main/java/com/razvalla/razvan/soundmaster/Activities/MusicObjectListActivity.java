@@ -171,7 +171,7 @@ public class MusicObjectListActivity extends ActionBarActivity implements Action
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
@@ -186,6 +186,8 @@ public class MusicObjectListActivity extends ActionBarActivity implements Action
                     return getString(R.string.Songs).toUpperCase(l);
                 case 3:
                     return getString(R.string.Playlists).toUpperCase(l);
+                case 4:
+                    return getString(R.string.Video).toUpperCase();
             }
             return null;
         }

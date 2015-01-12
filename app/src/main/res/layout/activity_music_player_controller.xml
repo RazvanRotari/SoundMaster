@@ -40,22 +40,22 @@
         android:id="@+id/PlayButton"
         android:background="@android:drawable/ic_media_play"
         android:contentDescription="play"
-        android:layout_above="@+id/song_label"
-        android:layout_alignLeft="@+id/artist_label"
-        android:layout_alignStart="@+id/artist_label"
-        android:onClick="playButtonPressed" />
+        android:onClick="playButtonPressed"
+        android:layout_alignStart="@+id/song_label"
+        android:layout_toRightOf="@+id/previousButton"
+        android:layout_alignBottom="@+id/NextButton" />
 
     <ImageButton
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/NextButton"
         android:background="@android:drawable/ic_media_next"
-        android:layout_alignBottom="@+id/PlayButton"
+        android:clickable="true"
+        android:onClick="nextButtonPressed"
         android:layout_toLeftOf="@+id/totalDuration"
         android:layout_toStartOf="@+id/totalDuration"
-        android:layout_marginBottom="12dp"
-        android:clickable="true"
-        android:onClick="nextButtonPressed" />
+        android:layout_above="@+id/progressBar"
+        android:layout_marginBottom="45dp" />
 
     <ImageButton
         android:layout_width="60dp"
@@ -83,13 +83,27 @@
         android:layout_above="@+id/artist_label"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/artworkImageView"
+        android:layout_centerHorizontal="true"
         android:layout_above="@+id/PlayButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/totalDuration"
-        android:layout_alignEnd="@+id/totalDuration" />
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/artworkImageView"
+            android:layout_above="@+id/PlayButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/totalDuration"
+            android:layout_alignEnd="@+id/totalDuration" />
+
+        <SurfaceView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/surfaceView" />
+
+    </FrameLayout>
 
 </RelativeLayout>

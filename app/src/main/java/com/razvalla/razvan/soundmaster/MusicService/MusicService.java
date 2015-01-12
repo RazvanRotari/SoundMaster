@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
+import android.view.SurfaceHolder;
 
 import com.google.gson.Gson;
 import com.razvalla.razvan.soundmaster.Model.SongInfo;
@@ -20,6 +21,13 @@ public class MusicService extends Service implements PlaybackManager.OnSongCompl
     private final String QUEUE_KEY = "QueueKey";
     private PlaybackManager playbackManager;
     private QueueManager queueManager;
+
+
+    public interface OnNextSong {
+        void onNextSong(SongInfo songInfo);
+    }
+    public OnNextSong onNextSong;
+
 
     public class MusicBinder extends Binder {
         public MusicService getService() {
@@ -57,6 +65,10 @@ public class MusicService extends Service implements PlaybackManager.OnSongCompl
         SongInfo songInfo = queueManager.nextSong();
         if (songInfo == null) return;
         playbackManager.playSong(songInfo);
+        if (onNextSong == null) {
+            return;
+        }
+        onNextSong.onNextSong(songInfo);
     }
 
     //Playback
@@ -92,14 +104,27 @@ public class MusicService extends Service implements PlaybackManager.OnSongCompl
         saveQueue();
     }
 
-    public void playNext() {
+    public boolean playNext() {
         SongInfo songInfo = queueManager.nextSong();
+        if (songInfo == null) {
+            return false;
+        }
         playSong(songInfo);
+        return true;
     }
 
-    public void playPrevious() {
+    public boolean playPrevious() {
         SongInfo songInfo = queueManager.previousSong();
+        if (songInfo == null) {
+            return false;
+        }
         playSong(songInfo);
+        return true;
+    }
+
+    public boolean seek(long progress) {
+        playbackManager.seek(progress);
+        return true;
     }
 
     public void addToQueue(SongInfo songInfo) {
@@ -154,4 +179,10 @@ public class MusicService extends Service implements PlaybackManager.OnSongCompl
         editor.commit();
 
     }
+
+    public void setSurfaceHolder(SurfaceHolder surfaceHolder) {
+        playbackManager.setSurfaceHolder(surfaceHolder);
+    }
+
+
 }

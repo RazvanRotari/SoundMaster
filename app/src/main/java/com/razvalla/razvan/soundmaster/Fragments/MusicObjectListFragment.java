@@ -1,23 +1,19 @@
 package com.razvalla.razvan.soundmaster.Fragments;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.app.LoaderManager;
 import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.razvalla.razvan.soundmaster.Activities.MusicObjectListActivity;
 import com.razvalla.razvan.soundmaster.Activities.MusicServiceProvider;
 import com.razvalla.razvan.soundmaster.Activities.MusicType;
 import com.razvalla.razvan.soundmaster.Model.SongInfo;
@@ -55,6 +51,9 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
                 break;
             case Artists:
                 fragment = new ArtistListFragment();
+                break;
+            case Video:
+                fragment = new VideoListFragment();
                 break;
             default:
                 fragment = new MusicObjectListFragment();
@@ -210,12 +209,12 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         String[] menuItems = getResources().getStringArray(R.array.musicListActions);
         for (int i = 0; i<menuItems.length; i++) {
             menu.add(Menu.NONE, i, i, menuItems[i]);
         }
     }
+
     protected SongInfo getSongFromCursor(Cursor cursor) {
         String songPath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
         SongInfo songInfo = new SongInfo();
@@ -223,14 +222,13 @@ public class MusicObjectListFragment extends ListFragment implements LoaderManag
         songInfo.name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME));
         songInfo.artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
         songInfo.key = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE_KEY));
-        songInfo.duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION));
+        songInfo.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION));
         songInfo.albumKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID));
         return songInfo;
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-
-        return true;
-    }
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        return true;
+//    }
 }
